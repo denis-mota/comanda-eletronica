@@ -7,7 +7,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { OrderProvider, useOrders } from './context/OrderContext';
-import FlowView from './components/FlowView';
 
 function WaiterView() {
   const { orders, addOrder } = useOrders();
@@ -224,9 +223,6 @@ function App() {
               <Button color="inherit" component={Link} to="/kitchen">
                 Visão da Cozinha
               </Button>
-              <Button color="inherit" component={Link} to="/flow">
-                Fluxo de Pedidos
-              </Button>
               <IconButton color="inherit" onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
                 {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
               </IconButton>
@@ -237,7 +233,6 @@ function App() {
             <Routes>
               <Route path="/" element={<WaiterView />} />
               <Route path="/kitchen" element={<KitchenView />} />
-              <Route path="/flow" element={<FlowView />} />
             </Routes>
           </Container>
         </Router>
