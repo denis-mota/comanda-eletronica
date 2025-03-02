@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 const OrderContext = createContext();
-const socket = io('http://localhost:3000');
+const socket = io(window.location.hostname === 'localhost' ? 'http://localhost:3000' : `http://${window.location.hostname}:3000`);
 
 export function OrderProvider({ children }) {
   const [orders, setOrders] = useState([]);
