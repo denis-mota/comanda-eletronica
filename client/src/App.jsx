@@ -9,6 +9,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { OrderProvider, useOrders } from './context/OrderContext';
 import QRCodeGenerator from './components/QRCodeGenerator';
 import MenuView from './components/MenuView';
+import Cardapio from './pages/cardapio';
+import Home from './pages/Home';
 
 function WaiterView() {
   const { orders, addOrder } = useOrders();
@@ -241,6 +243,9 @@ function App() {
               <Button color="inherit" component={Link} to="/kitchen">
                 Visão da Cozinha
               </Button>
+              <Button color="inherit" component={Link} to="/cardapio/0">
+                Cardápio
+              </Button>
               <IconButton color="inherit" onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
                 {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
               </IconButton>
@@ -249,9 +254,10 @@ function App() {
 
           <Container style={{ marginTop: '2rem' }}>
             <Routes>
-              <Route path="/" element={<WaiterView />} />
+              <Route path="/" element={<Home />} />
               <Route path="/kitchen" element={<KitchenView />} />
               <Route path="/menu/:table" element={<MenuView />} />
+              <Route path="/cardapio/:table" element={<Cardapio />} />
             </Routes>
           </Container>
         </Router>

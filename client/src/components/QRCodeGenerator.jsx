@@ -20,7 +20,7 @@ function QRCodeGenerator() {
                 <Typography variant="h6" gutterBottom>Mesa {table}</Typography>
                 <Box sx={{ mb: 2 }}>
                   <QRCodeSVG
-                    value={`${baseUrl}/menu/${table}`}
+                    value={`${baseUrl}/cardapio/${table}`}
                     size={200}
                     level="H"
                     includeMargin

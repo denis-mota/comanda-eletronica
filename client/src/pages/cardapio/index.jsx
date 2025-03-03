@@ -1,0 +1,150 @@
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  Container,
+  Typography,
+  TextField,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  AppBar,
+  Toolbar,
+} from '@mui/material';
+import { useOrders } from '../../context/OrderContext';
+
+const menuItems = [
+  {
+    id: 1,
+    name: 'Pilsen St. Oicle',
+    description: '5,0% de teor alcoólico e 17 IBU, esta Pilsen é a escolha perfeita para quem aprecia uma cerveja leve e refrescante.',
+    price: { min: 10.00, max: 13.00 },
+    image: 'https://via.placeholder.com/300x200?text=Pilsen',
+    category: 'Cervejas'
+  },
+  {
+    id: 2,
+    name: 'Imperial Stout St. Oicle',
+    description: '9,2% de teor alcoólico e 60 IBU, esta cerveja é uma experiência rica e robusta, repleta de complexidade.',
+    price: { min: 15.00, max: 19.00 },
+    image: 'https://via.placeholder.com/300x200?text=Imperial+Stout',
+    category: 'Cervejas'
+  },
+  {
+    id: 3,
+    name: 'Régua St. Oicle',
+    description: 'Encontre a sua favorita! Escolha e experimente quatro cervejas artesanais distintas, cada uma com seu caráter e sabor únicos.',
+    price: { fixed: 12.00 },
+    image: 'https://via.placeholder.com/300x200?text=Regua',
+    category: 'Cervejas'
+  },
+  {
+    id: 4,
+    name: 'Hot-Dog Alemão',
+    description: 'Duas salsichas tipo Viena (Wiener würschen) cuidadosamente selecionadas, acompanhadas pelo sabor autêntico do vinagrete e chucute.',
+    price: { fixed: 18.90 },
+    image: 'https://via.placeholder.com/300x200?text=Hot+Dog',
+    category: 'Lanches'
+  },
+  {
+    id: 5,
+    name: 'Sanduíche Carne Louca',
+    description: 'Pão francês recheado com carne desfiada temperada, tomate e alface.',
+    price: { fixed: 16.90 },
+    image: 'https://via.placeholder.com/300x200?text=Carne+Louca',
+    category: 'Lanches'
+  }
+];
+
+const categories = ['Todos', 'Cervejas', 'Bebidas', 'Lanches'];
+
+function Cardapio() {
+  const { table } = useParams();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const { addOrder } = useOrders();
+
+  const filteredItems = menuItems.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'Todos' || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const formatPrice = (price) => {
+    if (price.fixed) {
+      return `R$ ${price.fixed.toFixed(2)}`;
+    }
+    return `R$ ${price.min.toFixed(2)} ~ R$ ${price.max.toFixed(2)}`;
+  };
+
+  return (
+    <Box sx={{ pb: 4 }}>
+      <AppBar position="sticky" color="default" sx={{ mb: 2 }}>
+        <Toolbar>
+          <Box sx={{ width: '100%' }}>
+            <Typography variant="h6" component="div" sx={{ mb: 2 }}>
+              Cervejaria St. Oicle
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder="Pesquisar"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? 'contained' : 'outlined'}
+                  onClick={() => setSelectedCategory(category)}
+                  sx={{
+                    minWidth: 'auto',
+                    whiteSpace: 'nowrap',
+                    color: selectedCategory === category ? 'white' : 'primary',
+                    backgroundColor: selectedCategory === category ? 'primary.main' : 'transparent'
+                  }}
+                >
+                  {category}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Container>
+        <Box sx={{ mt: 2 }}>
+          {filteredItems.map((item) => (
+            <Card key={item.id} sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <CardContent sx={{ flex: 1 }}>
+                  <Typography variant="h6" component="div">
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {item.description}
+                  </Typography>
+                  <Typography variant="h6" color="primary">
+                    {formatPrice(item.price)}
+                  </Typography>
+                </CardContent>
+                <CardMedia
+                  component="img"
+                  sx={{ width: 150, height: 150, objectFit: 'cover' }}
+                  image={item.image}
+                  alt={item.name}
+                />
+              </Box>
+            </Card>
+          ))}
+        </Box>
+      </Container>
+    </Box>
+  );
+}
+
+export default Cardapio;
