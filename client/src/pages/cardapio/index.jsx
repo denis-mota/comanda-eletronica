@@ -21,7 +21,7 @@ const menuItems = [
   {
     id: 1,
     name: 'Feijoada',
-    description: '5,0% de teor alcoólico e 17 IBU, esta Pilsen é a escolha perfeita para quem aprecia uma cerveja leve e refrescante.',
+    description: 'Um ensopado robusto de feijão preto com suculentas carnes de porco, acompanhado de arroz, couve crocante e rodelas de laranja que realçam seu sabor marcante.',
     price: { fixed: 45.00 },
     image: getImageUrl('feijoada'),
     category: 'top brasl'
@@ -29,7 +29,7 @@ const menuItems = [
   {
     id: 2,
     name: 'Muqueca Brasil',
-    description: '9,2% de teor alcoólico e 60 IBU, esta cerveja é uma experiência rica e robusta, repleta de complexidade.',
+    description: 'Um vibrante ensopado de peixe e frutos do mar, mergulhado em leite de coco e azeite de dendê, com toques de tomate e coentro que explodem em sabores tropicais.',
     price: { fixed: 150.00 },
     image: getImageUrl('muqueca'),
     category: 'top brasil'
@@ -37,7 +37,7 @@ const menuItems = [
   {
     id: 3,
     name: 'Churrasco',
-    description: 'Encontre a sua favorita! Escolha e experimente quatro cervejas artesanais distintas, cada uma com seu caráter e sabor únicos.',
+    description: 'Carnes grelhadas à perfeição, com um aroma defumado irresistível, que se transformam em uma verdadeira explosão de sabor a cada mordida.',
     price: { fixed: 35.80 },
     image: getImageUrl('churrasco'),
     category: 'churrascos'
@@ -45,7 +45,7 @@ const menuItems = [
   {
     id: 4,
     name: 'Bacalhau à Brás',
-    description: 'Duas salsichas tipo Viena (Wiener würschen) cuidadosamente selecionadas, acompanhadas pelo sabor autêntico do vinagrete e chucute.',
+    description: 'Bacalhau desfiado delicadamente misturado a ovos cremosos e batata palha crocante, finalizado com azeitonas e salsa para um equilíbrio perfeito de sabores.',
     price: { fixed: 25.90 },
     image: getImageUrl('bacalhau'),
     category: 'frutos do mar'
@@ -53,7 +53,7 @@ const menuItems = [
   {
     id: 5,
     name: 'Lasanha',
-    description: 'Pão francês recheado com carne desfiada temperada, tomate e alface.',
+    description: 'Camadas de massa al dente, molho suculento e carne temperada, intercaladas com queijo derretido, criando uma experiência reconfortante e irresistível.',
     price: { fixed: 25.00 },
     image: getImageUrl('lasanha'),
     category: 'top brasil'
