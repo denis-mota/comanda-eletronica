@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Container, TextField, Box, IconButton, Grid, Card, CardContent, List, ListItem, ListItemText, ButtonGroup, useMediaQuery, Tab, Tabs } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Container, TextField, Box, IconButton, Grid, Card, CardContent, List, ListItem, ListItemText, ButtonGroup, useMediaQuery, Tab, Tabs, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useMemo, useEffect } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -208,6 +208,7 @@ function AppNavigation() {
   const location = useLocation();
   const [mode, setMode] = useState('light');
   
+  
   const theme = useMemo(
     () => createTheme({
       palette: {
@@ -229,6 +230,7 @@ function AppNavigation() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
