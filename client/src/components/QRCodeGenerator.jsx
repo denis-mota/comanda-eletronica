@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Box, Typography, Grid, Card, CardContent } from '@mui/material';
 
 const tables = [1, 2, 3];
-// Use the network IP address instead of hostname for QR codes to work across devices
-const baseUrl = `http://192.168.1.102:5173`;
 
 function QRCodeGenerator() {
+  const [baseUrl, setBaseUrl] = useState('');
+
+  useEffect(() => {
+    // Usar o protocolo, hostname e porta atuais para gerar a URL base
+    // Isso funcionará tanto em desenvolvimento quanto em produção
+    const protocol = window.location.protocol;
+    const hostname = window.location.hostname;
+    const port = window.location.port ? `:${window.location.port}` : '';
+    setBaseUrl(`${protocol}//${hostname}${port}`);
+  }, []);
+
   return (
     <Box sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>QR Codes das Mesas</Typography>
@@ -20,12 +29,14 @@ function QRCodeGenerator() {
               <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h6" gutterBottom>Mesa {table}</Typography>
                 <Box sx={{ mb: 2 }}>
-                  <QRCodeSVG
-                    value={`${baseUrl}/cardapio/${table}`}
-                    size={200}
-                    level="H"
-                    includeMargin
-                  />
+                  {baseUrl && (
+                    <QRCodeSVG
+                      value={`${baseUrl}/cardapio/${table}`}
+                      size={200}
+                      level="H"
+                      includeMargin
+                    />
+                  )}
                 </Box>
                 <Typography variant="body2" color="textSecondary">
                   Escaneie para acessar o cardápio
