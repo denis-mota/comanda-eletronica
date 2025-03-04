@@ -102,14 +102,25 @@ function Home() {
               <Grid item xs={12} sm={6} md={4} key={order.id}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">Mesa {order.table}</Typography>
-                    <Typography color="textSecondary">Status: {order.status === 'preparing' ? 'Preparando' : order.status === 'ready' ? 'Pronto' : 'Pendente'}</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                      <Typography variant="h5" color="primary">Mesa {order.tableId || order.table}</Typography>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: order.status === 'preparing' ? 'info.main' :
+                                 order.status === 'ready' ? 'success.main' : 'warning.main'
+                        }}
+                      >
+                        {order.status === 'preparing' ? 'Preparando' :
+                         order.status === 'ready' ? 'Pronto' : 'Pendente'}
+                      </Typography>
+                    </Box>
                     <List>
                       {order.items.map((item, index) => (
                         <ListItem key={index}>
                           <ListItemText
                             primary={item.name}
-                            secondary={`Quantity: ${item.quantity}`}
+                            secondary={`Quantidade: ${item.quantity}`}
                           />
                         </ListItem>
                       ))}

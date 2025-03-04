@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Container, TextField, Box, IconButton, Grid, Card, CardContent, List, ListItem, ListItemText, ButtonGroup, useMediaQuery, Tab, Tabs } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useMemo, useEffect } from 'react';
@@ -108,14 +108,25 @@ function WaiterView() {
               <Grid item xs={12} sm={6} md={4} key={order.id}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">Mesa {order.table}</Typography>
-                    <Typography color="textSecondary">Status: {order.status === 'preparing' ? 'Preparando' : order.status === 'ready' ? 'Pronto' : 'Pendente'}</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                      <Typography variant="h5" color="primary">Mesa {order.tableId || order.table}</Typography>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: order.status === 'preparing' ? 'info.main' :
+                                 order.status === 'ready' ? 'success.main' : 'warning.main'
+                        }}
+                      >
+                        {order.status === 'preparing' ? 'Preparando' :
+                         order.status === 'ready' ? 'Pronto' : 'Pendente'}
+                      </Typography>
+                    </Box>
                     <List>
                       {order.items.map((item, index) => (
                         <ListItem key={index}>
                           <ListItemText
                             primary={item.name}
-                            secondary={`Quantity: ${item.quantity}`}
+                            secondary={`Quantidade: ${item.quantity}`}
                           />
                         </ListItem>
                       ))}
@@ -144,7 +155,7 @@ function KitchenView() {
           <Grid item xs={12} sm={6} md={4} key={order.id}>
             <Card>
               <CardContent>
-                <Typography variant="h6">Mesa {order.table}</Typography>
+                <Typography variant="h6">Mesa {order.tableId || order.table}</Typography>
                 <Typography color="textSecondary">Status: {order.status === 'preparing' ? 'Preparando' : order.status === 'ready' ? 'Pronto' : 'Pendente'}</Typography>
                 <List>
                   {order.items.map((item, index) => (
@@ -193,7 +204,8 @@ function KitchenView() {
   );
 }
 
-function App() {
+function AppNavigation() {
+  const location = useLocation();
   const [mode, setMode] = useState('light');
   
   const theme = useMemo(
@@ -211,36 +223,49 @@ function App() {
   const toggleColorMode = () => {
     setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
+  
+  // Check if current path is cardapio
+  const isCardapioPage = location.pathname.includes('/cardapio/');
 
   return (
     <ThemeProvider theme={theme}>
-      <OrderProvider>
-        <Router>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Comanda Eletrônica
-              </Typography>
-              <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Comanda Eletrônica
+          </Typography>
+          <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          {!isCardapioPage && (
+            <>
               <Button color="inherit" component={Link} to="/">
                 Home
               </Button>
               <Button color="inherit" component={Link} to="/kitchen">
                 Cozinha
               </Button>
-            </Toolbar>
-          </AppBar>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cardapio/:table" element={<Cardapio />} />
-            <Route path="/kitchen" element={<Kitchen />} />
-          </Routes>
-        </Router>
-      </OrderProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cardapio/:table" element={<Cardapio />} />
+        <Route path="/kitchen" element={<Kitchen />} />
+      </Routes>
     </ThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <OrderProvider>
+      <Router>
+        <AppNavigation />
+      </Router>
+    </OrderProvider>
   );
 }
 

@@ -8,11 +8,13 @@ import {
   Button,
   Box,
   Chip,
+  IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useOrders } from '../context/OrderContext';
 
 function Kitchen() {
-  const { orders, updateOrderStatus } = useOrders();
+  const { orders, updateOrderStatus, deleteOrder } = useOrders();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -91,6 +93,20 @@ function Kitchen() {
                     </Button>
                   )}
                 </Box>
+
+                {order.status === 'ready' && (
+                  <Box sx={{ mt: 2 }}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      fullWidth
+                      startIcon={<DeleteIcon />}
+                      onClick={() => deleteOrder(order.id)}
+                    >
+                      Remover Pedido
+                    </Button>
+                  </Box>
+                )}
               </CardContent>
             </Card>
           </Grid>

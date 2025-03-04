@@ -20,47 +20,47 @@ import { getImageUrl } from '../../utils/imageUtils';
 const menuItems = [
   {
     id: 1,
-    name: 'Pilsen St. Oicle',
+    name: 'Feijoada',
     description: '5,0% de teor alcoólico e 17 IBU, esta Pilsen é a escolha perfeita para quem aprecia uma cerveja leve e refrescante.',
-    price: { min: 10.00, max: 13.00 },
-    image: getImageUrl('pilsen'),
-    category: 'Cervejas'
+    price: { fixed: 45.00 },
+    image: getImageUrl('feijoada'),
+    category: 'top brasl'
   },
   {
     id: 2,
-    name: 'Imperial Stout St. Oicle',
+    name: 'Muqueca Brasil',
     description: '9,2% de teor alcoólico e 60 IBU, esta cerveja é uma experiência rica e robusta, repleta de complexidade.',
-    price: { min: 15.00, max: 19.00 },
-    image: getImageUrl('imperialStout'),
-    category: 'Cervejas'
+    price: { fixed: 150.00 },
+    image: getImageUrl('muqueca'),
+    category: 'top brasil'
   },
   {
     id: 3,
-    name: 'Régua St. Oicle',
+    name: 'Churrasco',
     description: 'Encontre a sua favorita! Escolha e experimente quatro cervejas artesanais distintas, cada uma com seu caráter e sabor únicos.',
-    price: { fixed: 12.00 },
-    image: getImageUrl('regua'),
-    category: 'Cervejas'
+    price: { fixed: 35.80 },
+    image: getImageUrl('churrasco'),
+    category: 'churrascos'
   },
   {
     id: 4,
-    name: 'Hot-Dog Alemão',
+    name: 'Bacalhau à Brás',
     description: 'Duas salsichas tipo Viena (Wiener würschen) cuidadosamente selecionadas, acompanhadas pelo sabor autêntico do vinagrete e chucute.',
-    price: { fixed: 18.90 },
-    image: getImageUrl('hotDog'),
-    category: 'Lanches'
+    price: { fixed: 25.90 },
+    image: getImageUrl('bacalhau'),
+    category: 'frutos do mar'
   },
   {
     id: 5,
-    name: 'Sanduíche Carne Louca',
+    name: 'Lasanha',
     description: 'Pão francês recheado com carne desfiada temperada, tomate e alface.',
-    price: { fixed: 16.90 },
-    image: getImageUrl('carneLouca'),
-    category: 'Lanches'
+    price: { fixed: 25.00 },
+    image: getImageUrl('lasanha'),
+    category: 'top brasil'
   }
 ];
 
-const categories = ['Todos', 'Cervejas', 'Bebidas', 'Lanches'];
+const categories = ['Todos', 'churrascos', 'frutos do mar', 'top brasil'];
 
 function Cardapio() {
   const { table } = useParams();
