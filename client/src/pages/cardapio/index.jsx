@@ -133,7 +133,7 @@ function Cardapio() {
         <Toolbar>
           <Box sx={{ width: '100%' }}>
             <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-              Cervejaria St. Oicle
+              Bar do Arlindo
             </Typography>
             <TextField
               fullWidth
