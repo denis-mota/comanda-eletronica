@@ -12,8 +12,10 @@ import {
   Grid,
   AppBar,
   Toolbar,
+  Paper,
 } from '@mui/material';
 import { useOrders } from '../../context/OrderContext';
+import { getImageUrl } from '../../utils/imageUtils';
 
 const menuItems = [
   {
@@ -21,7 +23,7 @@ const menuItems = [
     name: 'Pilsen St. Oicle',
     description: '5,0% de teor alcoólico e 17 IBU, esta Pilsen é a escolha perfeita para quem aprecia uma cerveja leve e refrescante.',
     price: { min: 10.00, max: 13.00 },
-    image: 'https://via.placeholder.com/300x200?text=Pilsen',
+    image: getImageUrl('pilsen'),
     category: 'Cervejas'
   },
   {
@@ -29,7 +31,7 @@ const menuItems = [
     name: 'Imperial Stout St. Oicle',
     description: '9,2% de teor alcoólico e 60 IBU, esta cerveja é uma experiência rica e robusta, repleta de complexidade.',
     price: { min: 15.00, max: 19.00 },
-    image: 'https://via.placeholder.com/300x200?text=Imperial+Stout',
+    image: getImageUrl('imperialStout'),
     category: 'Cervejas'
   },
   {
@@ -37,7 +39,7 @@ const menuItems = [
     name: 'Régua St. Oicle',
     description: 'Encontre a sua favorita! Escolha e experimente quatro cervejas artesanais distintas, cada uma com seu caráter e sabor únicos.',
     price: { fixed: 12.00 },
-    image: 'https://via.placeholder.com/300x200?text=Regua',
+    image: getImageUrl('regua'),
     category: 'Cervejas'
   },
   {
@@ -45,7 +47,7 @@ const menuItems = [
     name: 'Hot-Dog Alemão',
     description: 'Duas salsichas tipo Viena (Wiener würschen) cuidadosamente selecionadas, acompanhadas pelo sabor autêntico do vinagrete e chucute.',
     price: { fixed: 18.90 },
-    image: 'https://via.placeholder.com/300x200?text=Hot+Dog',
+    image: getImageUrl('hotDog'),
     category: 'Lanches'
   },
   {
@@ -53,7 +55,7 @@ const menuItems = [
     name: 'Sanduíche Carne Louca',
     description: 'Pão francês recheado com carne desfiada temperada, tomate e alface.',
     price: { fixed: 16.90 },
-    image: 'https://via.placeholder.com/300x200?text=Carne+Louca',
+    image: getImageUrl('carneLouca'),
     category: 'Lanches'
   }
 ];
@@ -64,6 +66,7 @@ function Cardapio() {
   const { table } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedItems, setSelectedItems] = useState([]);
   const { addOrder } = useOrders();
 
   const filteredItems = menuItems.filter(item => {
@@ -80,8 +83,52 @@ function Cardapio() {
     return `R$ ${price.min.toFixed(2)} ~ R$ ${price.max.toFixed(2)}`;
   };
 
+  const handleSelectItem = (item) => {
+    const itemPrice = item.price.fixed || item.price.min;
+    
+    // Check if item is already in selectedItems
+    const existingItemIndex = selectedItems.findIndex(i => i.id === item.id);
+    
+    if (existingItemIndex >= 0) {
+      // Item already exists, increase quantity
+      const updatedItems = [...selectedItems];
+      updatedItems[existingItemIndex].quantity += 1;
+      setSelectedItems(updatedItems);
+    } else {
+      // Add new item
+      setSelectedItems([...selectedItems, {
+        id: item.id,
+        name: item.name,
+        price: itemPrice,
+        quantity: 1
+      }]);
+    }
+    
+    alert(`${item.name} adicionado ao pedido!`);
+  };
+
+  const handleSendOrder = () => {
+    if (selectedItems.length === 0) return;
+    
+    const newOrder = {
+      id: Date.now().toString(),
+      tableId: table,
+      items: selectedItems,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    
+    addOrder(newOrder);
+    setSelectedItems([]);
+    alert('Pedido enviado para a cozinha!');
+  };
+
+  const calculateTotal = () => {
+    return selectedItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
   return (
-    <Box sx={{ pb: 4 }}>
+    <Box sx={{ pb: 8 }}> {/* Increased padding bottom to make room for the footer */}
       <AppBar position="sticky" color="default" sx={{ mb: 2 }}>
         <Toolbar>
           <Box sx={{ width: '100%' }}>
@@ -117,6 +164,10 @@ function Cardapio() {
       </AppBar>
 
       <Container>
+        <Typography variant="h4" component="h1" sx={{ my: 3, textAlign: 'center', fontWeight: 'bold' }}>
+          Pratos do Dia
+        </Typography>
+        
         <Box sx={{ mt: 2 }}>
           {filteredItems.map((item) => (
             <Card key={item.id} sx={{ mb: 2 }}>
@@ -131,6 +182,14 @@ function Cardapio() {
                   <Typography variant="h6" color="primary">
                     {formatPrice(item.price)}
                   </Typography>
+                  <Button 
+                    variant="contained" 
+                    color="primary" 
+                    sx={{ mt: 2 }}
+                    onClick={() => handleSelectItem(item)}
+                  >
+                    Selecionar
+                  </Button>
                 </CardContent>
                 <CardMedia
                   component="img"
@@ -143,6 +202,36 @@ function Cardapio() {
           ))}
         </Box>
       </Container>
+
+      {/* Sticky footer showing total */}
+      {selectedItems.length > 0 && (
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            position: 'fixed', 
+            bottom: 0, 
+            left: 0, 
+            right: 0, 
+            p: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: 'background.paper',
+            zIndex: 1000
+          }}
+        >
+          <Typography variant="h6" component="div">
+            Total a Pagar: R$ {calculateTotal().toFixed(2)}
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="success"
+            onClick={handleSendOrder}
+          >
+            Enviar Pedido
+          </Button>
+        </Paper>
+      )}
     </Box>
   );
 }

@@ -5,6 +5,7 @@ import {
   TextField, Box, List, ListItem, ListItemText, Divider, Alert, Paper
 } from '@mui/material';
 import { useOrders } from '../context/OrderContext';
+import { getImageUrl } from '../utils/imageUtils';
 
 // Example dishes for the menu
 const menuItems = [
@@ -13,21 +14,21 @@ const menuItems = [
     name: 'Filé Mignon ao Molho Madeira',
     description: 'Filé mignon grelhado com molho madeira, acompanha arroz e batatas.',
     price: 45.90,
-    image: 'https://via.placeholder.com/300x200?text=File+Mignon'
+    image: getImageUrl('fileMignon')
   },
   {
     id: 2,
     name: 'Salmão Grelhado',
     description: 'Salmão grelhado com ervas finas, acompanha legumes e purê de batata.',
     price: 52.50,
-    image: 'https://via.placeholder.com/300x200?text=Salmao+Grelhado'
+    image: getImageUrl('salmao')
   },
   {
     id: 3,
     name: 'Risoto de Funghi',
     description: 'Risoto cremoso com funghi e parmesão.',
     price: 38.90,
-    image: 'https://via.placeholder.com/300x200?text=Risoto+Funghi'
+    image: getImageUrl('risoto')
   }
 ];
 

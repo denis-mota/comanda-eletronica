@@ -11,6 +11,7 @@ import QRCodeGenerator from './components/QRCodeGenerator';
 import MenuView from './components/MenuView';
 import Cardapio from './pages/cardapio';
 import Home from './pages/Home';
+import Kitchen from './pages/Kitchen';
 
 function WaiterView() {
   const { orders, addOrder } = useOrders();
@@ -193,40 +194,23 @@ function KitchenView() {
 }
 
 function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [mode, setMode] = useState(() => {
-    const savedMode = localStorage.getItem('themeMode');
-    return savedMode || (prefersDarkMode ? 'dark' : 'light');
-  });
+  const [mode, setMode] = useState('light');
+  
+  const theme = useMemo(
+    () => createTheme({
+      palette: {
+        mode,
+        primary: {
+          main: '#1976d2',
+        },
+      },
+    }),
+    [mode],
+  );
 
-  useEffect(() => {
-    localStorage.setItem('themeMode', mode);
-  }, [mode]);
-
-  const theme = useMemo(() => createTheme({
-    palette: {
-      mode,
-      primary: {
-        main: mode === 'light' ? '#1976d2' : '#90caf9',
-      },
-      secondary: {
-        main: mode === 'light' ? '#dc004e' : '#f48fb1',
-      },
-      background: {
-        default: mode === 'light' ? '#ffffff' : '#121212',
-        paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
-      },
-      text: {
-        primary: mode === 'light' ? '#000000' : '#ffffff',
-        secondary: mode === 'light' ? '#666666' : '#b3b3b3',
-      },
-    },
-  }), [mode]);
-
-  useEffect(() => {
-    document.body.style.backgroundColor = theme.palette.background.default;
-    document.body.style.color = theme.palette.text.primary;
-  }, [theme]);
+  const toggleColorMode = () => {
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -234,32 +218,26 @@ function App() {
         <Router>
           <AppBar position="static">
             <Toolbar>
-              <Typography variant="h6" style={{ flexGrow: 1 }}>
-                Sistema de Pedidos do Restaurante
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Comanda Eletrônica
               </Typography>
+              <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
               <Button color="inherit" component={Link} to="/">
-                Visão do Garçom
+                Home
               </Button>
               <Button color="inherit" component={Link} to="/kitchen">
-                Visão da Cozinha
+                Cozinha
               </Button>
-              <Button color="inherit" component={Link} to="/cardapio/0">
-                Cardápio
-              </Button>
-              <IconButton color="inherit" onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
-                {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-              </IconButton>
             </Toolbar>
           </AppBar>
 
-          <Container style={{ marginTop: '2rem' }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/kitchen" element={<KitchenView />} />
-              <Route path="/menu/:table" element={<MenuView />} />
-              <Route path="/cardapio/:table" element={<Cardapio />} />
-            </Routes>
-          </Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cardapio/:table" element={<Cardapio />} />
+            <Route path="/kitchen" element={<Kitchen />} />
+          </Routes>
         </Router>
       </OrderProvider>
     </ThemeProvider>

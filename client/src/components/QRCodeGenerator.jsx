@@ -3,7 +3,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Box, Typography, Grid, Card, CardContent } from '@mui/material';
 
 const tables = [1, 2, 3];
-const baseUrl = window.location.origin;
+// Use the network IP address instead of hostname for QR codes to work across devices
+const baseUrl = `http://192.168.1.102:5173`;
 
 function QRCodeGenerator() {
   return (
